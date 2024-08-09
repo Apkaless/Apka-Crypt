@@ -45,15 +45,15 @@ def enc(file):
         contents = f.read()
     salt = "".join(str(random.randint(0,9)) for i in range(100))
     encrypted_data = ""
-    print(f'\n{green}[+] Generating Encryption Key')
+    print(f'\n{green}[+] Generating Encryption Key\n')
     time.sleep(3)
-    print(f'{green}\n[+] Ebcryption Progress {white}10%\n')
+    print(f'{green}[+] Encryption Progress {white}10%\n')
     time.sleep(1)
-    print(f'{green}[+] Ebcryption Progress {white}30%\n')
+    print(f'{green}[+] Encryption Progress {white}30%\n')
     time.sleep(1)
-    print(f'{green}[+] Ebcryption Progress {white}50%\n')
+    print(f'{green}[+] Encryption Progress {white}50%\n')
     time.sleep(1)
-    print(f'{green}[+] Ebcryption Progress {white}100%\n')
+    print(f'{green}[+] Encryption Progress {white}100%\n')
     time.sleep(1)
     for i in range(len(contents)):
         current_letter = contents[i]
