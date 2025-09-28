@@ -1,25 +1,65 @@
 import random
 import os
 from colorama import Fore, init
-import time
 
-init(convert=True)
-version = '1'
-github_url = 'https://github.com/apkaless'
-instagram = 'https://instagram.com/apkaless'
-region = 'IRAQ'
-red = Fore.RED
-green = Fore.GREEN
-yellow = Fore.YELLOW
-white = Fore.WHITE
-cyan = Fore.CYAN
-lw = Fore.LIGHTWHITE_EX
-black = Fore.BLACK
-lr = Fore.LIGHTRED_EX
-lb = Fore.LIGHTBLUE_EX
-lc = Fore.LIGHTCYAN_EX
-lib = Fore.LIGHTBLACK_EX
-res = Fore.RESET
+class APKAC:
+    def __init__(self) -> None:
+        self.encrypted_data = ''
+        self.key = self.key_generator(100)
+        
+
+    def load_file(self, file_path: str):
+        """Read And Return File Content"""
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                data = f.read()
+                if not data:
+                    print('The File Can\'t Be Empty.')
+                    return False
+            return data
+        except FileNotFoundError:
+            print(f'No Such File Found: {file_path}\nPlease Make Sure The File Path is Correct')
+            return False
+
+    def key_generator(self, length: int):
+        """Generates Random Salt"""
+        return "".join(str(random.randint(0,9)) for _ in range(length))
+    
+    def crypt(self, file_path: str):
+        """Crypt And Save The Given File"""
+        content = self.load_file(file_path)
+        if content:
+            for c in range(len(content)):
+                current_char = content[c]
+                current_num = self.key[c % len(self.key)]
+                self.encrypted_data += chr(ord(current_char) ^ ord(current_num))
+            raw_encrypted = repr(self.encrypted_data)
+            if self.write_encrypted_data(raw_encrypted, self.key):
+                return True
+            else:
+                return False
+        print('Error Reading File Content')
+        return False
+
+    def write_encrypted_data(self, data, key):
+        buff = f"""
+wopvEaTEcopFEavc = {data}
+iOpvEoeaaeavocp = '{key}'
+oIoeaTEAcvpae = ""
+for i in range(len(wopvEaTEcopFEavc)):
+    nOpcvaEaopcTEapcoTEac = wopvEaTEcopFEavc[i]
+    qQoeapvTeaocpOcivNva = iOpvEoeaaeavocp[i % len(iOpvEoeaaeavocp)]
+    oIoeaTEAcvpae += chr(ord(nOpcvaEaopcTEapcoTEac) ^ ord(qQoeapvTeaocpOcivNva))
+eval(compile(oIoeaTEAcvpae, '<string>', 'exec'))
+        """
+        try:
+            with open('encrypted_code.py', 'w', encoding='utf-8') as f:
+                f.write(buff)
+                return True
+        except Exception as e:
+            print(f'Error While Writing Encrypted Data: {str(e)}')
+            return False
+
 
 def print_banner():
     os.system('cls')
@@ -39,39 +79,32 @@ def print_banner():
 
 ''')
 
-
-def enc(file):
-    with open(file, encoding='utf8') as f:
-        contents = f.read()
-    salt = "".join(str(random.randint(0,9)) for i in range(100))
-    encrypted_data = ""
-    for i in range(len(contents)):
-        current_letter = contents[i]
-        current_number = salt[i % len(salt)]
-        encrypted_data += chr(ord(current_letter) ^ ord(current_number))
-    c = repr(encrypted_data)
-    d = c.replace("'", "")
-    buff = f"""
-wopvEaTEcopFEavc = "{d}"
-iOpvEoeaaeavocp = "{salt}"
-oIoeaTEAcvpae = ""
-for i in range(len(wopvEaTEcopFEavc)):
-    nOpcvaEaopcTEapcoTEac = wopvEaTEcopFEavc[i]
-    qQoeapvTeaocpOcivNva = iOpvEoeaaeavocp[i % len(iOpvEoeaaeavocp)]
-    oIoeaTEAcvpae += chr(ord(nOpcvaEaopcTEapcoTEac) ^ ord(qQoeapvTeaocpOcivNva))
-eval(compile(oIoeaTEAcvpae, '<string>', 'exec'))
-    """
-    with open('stub.py', 'w', encoding='utf8') as f:
-        f.write(buff)
-    print(f'\n{green}[+] Encrypted And Saved To →  {white}{os.path.abspath('stub.py')}')
-    input('\n')
-if __name__ == '__main__':
-        while True:
-            print_banner()
-            file = input(f'{cyan}\n↳ Py File To Encrypt {cyan}→{white}  ')
-            if file: 
-                enc(file)
+if __name__ == "__main__":
+    init(convert=True)
+    version = '1'
+    github_url = 'https://github.com/apkaless'
+    instagram = 'https://instagram.com/apkaless'
+    region = 'IRAQ'
+    red = Fore.RED
+    green = Fore.GREEN
+    yellow = Fore.YELLOW
+    white = Fore.WHITE
+    cyan = Fore.CYAN
+    lw = Fore.LIGHTWHITE_EX
+    black = Fore.BLACK
+    lr = Fore.LIGHTRED_EX
+    lb = Fore.LIGHTBLUE_EX
+    lc = Fore.LIGHTCYAN_EX
+    lib = Fore.LIGHTBLACK_EX
+    res = Fore.RESET
+    crypter = APKAC()
+    while True:
+        print_banner()
+        file = input(f'\n↳ Py File To Encrypt →  ')
+        if file: 
+            if crypter.crypt(file):
+                print(f'\n[+] Encrypted And Saved To → {os.path.abspath('encrypted_code.py')}')
+                input('\n')
             else:
-                print(f'\n{red}[-] Please Enter A File')
-                time.sleep(2)
-                continue
+                print('ERROR Encrypting The File')
+                input('\n')
